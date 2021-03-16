@@ -22,8 +22,7 @@ router.get('/acronym', async (req, res)=>{
         let acronyms = await Acronym.fuzzySearch(search)
         .paginate({}, {offset: from, limit})
         .exec();
-        
-        console.log(acronyms);
+
         res.setHeader('hasMore', acronyms.hasNextPage);
         res.status(200).send(acronyms);
     }catch (err) {
@@ -56,7 +55,8 @@ router.route('/acronym/:acronym')
         const selectedAcronym = await Acronym.findOneAndUpdate({acronym},data,{
             new: true,
             upsert: true,
-            returnOriginal: false
+            returnOriginal: false,
+            useFindAndModify: false
           });
         res.status(201).send(selectedAcronym);
     }catch (err){
