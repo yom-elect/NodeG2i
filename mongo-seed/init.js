@@ -1,4 +1,4 @@
-[
+export const seed = [
 {
   "?": "I don't understand what you mean"
 },
@@ -4618,4 +4618,4 @@
 {
   "ZZZZ": "Sleeping (or bored)"
 }
-]
+];

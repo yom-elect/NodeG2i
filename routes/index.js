@@ -1,10 +1,6 @@
 import express from 'express';
 const app = express();
 
-
-app.use("/api/users", require("./users/registerUsers"));
-app.use("/api/users", require("./users/authUsers"));
-app.use("/api/users", require("./users/userImages"));
-app.use("/api/users", require("./users/userCart"));
+app.use("/api/users", require("./acronyms/registerUsers"));
 
 module.exports = app;
