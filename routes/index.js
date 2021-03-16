@@ -1,6 +1,7 @@
 import express from 'express';
 const app = express();
 
-app.use("/api/users", require("./acronyms/registerUsers"));
+app.use('/api', require('./acronyms/acronym'));
+app.use('/api/random', require('./acronyms/randomAcronym'));
 
 module.exports = app;

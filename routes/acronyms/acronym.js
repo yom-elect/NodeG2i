@@ -1,7 +1,17 @@
 import express from 'express';
 const router = express.Router();
 
+import {  cryptoToken } from '../../utils/token';
 import { Acronym } from '../../models/acronym';
+import {auth} from '../../middlewares/auth';
+
+
+router.get('/generateToken', (req,res)=>{
+    const token = cryptoToken();
+    res.cookie("w_auth", token).status(200).json({
+        loginSuccess: true,
+    });
+})
 
 router.get('/acronym', async (req, res)=>{
     try{
@@ -38,7 +48,7 @@ router.route('/acronym/:acronym')
           });
     }
 })
-.put(async(req,res)=>{
+.put(auth, async(req,res)=>{
     try{
         const {acronym} = req.params;
         const data = req.body;
@@ -56,13 +66,12 @@ router.route('/acronym/:acronym')
           });
     }
 })
-.delete(async(req,res)=>{
+.delete(auth, async(req,res)=>{
     try{
         const {acronym} = req.params;
-        const data = req.body;
 
-        const selectedAcronym = await Acronym.deleteOne({acronym});
-        res.status(200).send(selectedAcronym);
+        const deletedAcronym = await Acronym.deleteOne({acronym});
+        res.status(200).send(deletedAcronym);
     }catch (err){
         res.status(400).json({
             success: false,
