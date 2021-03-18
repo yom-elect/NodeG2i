@@ -1,16 +1,14 @@
-import { set, Promise, connect } from "mongoose";
+import { set, connect } from "mongoose";
 import { Acronym } from '../models/acronym';
 import { seed } from '../mongo-seed/init';
 set("useUnifiedTopology", true);
 set("useCreateIndex", true);
 
-Promise = global.Promise;
-
 const mongooseConnect = () => {
   connect(process.env.DATABASE, { useNewUrlParser: true })
     .then(async (_) => {
-      for (data of seed){
-        const mapData = Object.entries(data);
+      for (let data of seed){
+        const mapData = Object.entries(data)[0];
         const acry = new Acronym({
           acronym: mapData[0],
           definition: mapData[1]

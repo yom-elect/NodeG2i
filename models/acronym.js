@@ -9,7 +9,6 @@ const acronymSchema = _Schema(
             type: String,
             required: true,
             trim: true,
-            unique: 1,
           },
           definition: {
             type: String,

@@ -22,9 +22,9 @@ const corsOption = {
 app.use(cors(corsOption));
 
 require("dotenv").config();
-const mongooseConnect = require("./util/database").mongooseConnect;
+const mongooseConnect = require("./utils/database").mongooseConnect;
 
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //Models
