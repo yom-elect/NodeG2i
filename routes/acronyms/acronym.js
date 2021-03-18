@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 
-import {  cryptoToken } from '../../utils/token';
+import cryptoToken from '../../utils/token';
 import { Acronym } from '../../models/acronym';
 import {auth} from '../../middlewares/auth';
 
@@ -16,14 +16,13 @@ router.get('/generateToken', (req,res)=>{
 router.get('/acronym', async (req, res)=>{
     try{
         let from = req.query.from ? parseInt(req.query.from) : 50;
-        let search = req.query.search ;
+        let search = req.query.search ?? ""  ;
         let limit = req.query.limit ? parseInt(req.query.limit) : 10;
 
-        let acronyms = await Acronym.fuzzySearch(search)
-        .paginate({}, {offset: from, limit})
+        const acronyms = await Acronym.fuzzySearch(search)
+         .limit(limit)
+        .skip(from)
         .exec();
-
-        res.setHeader('hasMore', acronyms.hasNextPage);
         res.status(200).send(acronyms);
     }catch (err) {
         res.status(400).json({

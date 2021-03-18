@@ -7,19 +7,21 @@ import routes from './routes';
 const app = express();
 app.use(cookieParser());
 
-const whitelist = ["*"];
-const corsOption = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-};
+// const whitelist = ["*"];
+// const corsOption = {
+//   origin: function (origin, callback) {
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+//   credentials: true,
+// };
 
-app.use(cors(corsOption));
+//app.use(cors(corsOption));
+
+app.use(cors());
 
 require("dotenv").config();
 const mongooseConnect = require("./utils/database").mongooseConnect;

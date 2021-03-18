@@ -4,4 +4,4 @@ const cryptoToken = () => {
   return SHA256().toString();
 };
 
-export default { cryptoToken };
+export default cryptoToken;
