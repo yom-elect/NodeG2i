@@ -9,7 +9,7 @@ router.get('/:count?', async (req,res)=>{
         const {count} = req.params;
 
         const selectedAcronym = await Acronym.findRandom({},{}, {limit:count});
-        res.status(200).send(selectedAcronym);
+        res.status(200).json({data: selectedAcronym, success: true});
     }catch(err){
         res.status(400).json({
             success: false,

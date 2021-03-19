@@ -19,11 +19,18 @@ router.get('/acronym', async (req, res)=>{
         let search = req.query.search ?? ""  ;
         let limit = req.query.limit ? parseInt(req.query.limit) : 10;
 
-        const acronyms = await Acronym.fuzzySearch(search)
-         .limit(limit)
-        .skip(from)
-        .exec();
-        res.status(200).send(acronyms);
+        const [acronyms, itemCount] = await Promise.all([
+            Acronym.fuzzySearch(search).limit(limit).skip(from).lean().exec(),
+            Acronym.count({})
+        ]);
+        
+        const pageCount = Math.ceil((itemCount - from)/ limit);
+
+        res.status(200).json({
+            data: acronyms,
+            success: true,
+            has_more: pageCount > 1 ? true : false
+        });
     }catch (err) {
         res.status(400).json({
             success: false,
@@ -37,8 +44,11 @@ router.route('/acronym/:acronym')
     try{
         const {acronym} = req.params;
 
-        const selectedAcronym = await Acronym.findOne({acronym});
-        res.status(200).send(selectedAcronym);
+        const selectedAcronym = await Acronym.findOne({acronym},'acronym');
+        res.status(200).json({
+            data: selectedAcronym,
+            success: true
+        });
     }catch (err){
         res.status(400).json({
             success: false,
@@ -57,7 +67,7 @@ router.route('/acronym/:acronym')
             returnOriginal: false,
             useFindAndModify: false
           });
-        res.status(201).send(selectedAcronym);
+        res.status(201).send({data: selectedAcronym, success: true});
     }catch (err){
         res.status(400).json({
             success: false,
@@ -86,7 +96,7 @@ router.post('/acroym', async (req, res)=>{
         const result = await acronym.save();
         res.status(201).json({
             success: true,
-            acronym: result,
+            data: result,
         });
     }catch(err){
         res.status(400).json({
